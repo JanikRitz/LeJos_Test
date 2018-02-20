@@ -12,7 +12,7 @@ public class Touch_Test implements ButtonListener {
 
     public Touch_Test() {
         this.pilot = new DifferentialPilot(5.5, 11.5, Motor.B, Motor.C, false);
-        this.pilot.setTravelSpeed(5);
+        this.pilot.setTravelSpeed(12);
 
         this.touchSensor = new TouchSensor(SensorPort.S4);
 
