@@ -5,7 +5,6 @@ import static lejos.util.Delay.msDelay;
 
 public class Rotate_Test implements ButtonListener {
     DifferentialPilot pilot;
-    boolean exit;
 
     public static void main(String[] a) {
         Rotate_Test c_test = new Rotate_Test();
@@ -19,7 +18,7 @@ public class Rotate_Test implements ButtonListener {
     }
 
     private void main_loop() {
-        while (!this.exit) {
+        while (true) {
             pilot.rotate(90); // -> ~45 degrees
             msDelay(5000);
             pilot.travel(50);
@@ -29,8 +28,9 @@ public class Rotate_Test implements ButtonListener {
 
     @Override
     public void buttonPressed(Button button) {
-        this.exit = true;
+        System.exit(0);
     }
+
 
     @Override
     public void buttonReleased(Button button) {
