@@ -16,8 +16,8 @@ public class Color_Distance implements ButtonListener{
 
     public Color_Distance(){
         this.exit = false;
-        this.color_sensor = new ColorSensor(SensorPort.S2);
-        this.sonic_sensor = new UltrasonicSensor(SensorPort.S1);
+        this.color_sensor = new ColorSensor(SensorPort.S1);
+        this.sonic_sensor = new UltrasonicSensor(SensorPort.S2);
         Button.ESCAPE.addButtonListener(this);
     }
 
