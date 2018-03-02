@@ -8,7 +8,10 @@ Main Robot (Janik)
     A          -
     B          Links
     C          Rechts
-Übersetzung: 3:1
+Übersetzung: 3:5 (1:1,67)
+Raddurchmesser: 30mm (35-36mm mit Kette)
+Radabstand: 136mm
+
 
 Slave Robot
     Port       Device
@@ -20,3 +23,5 @@ Slave Robot
     B          Links
     C          Rechts
 Keine Übersetzung
+Raddurchmesser: 56mm (55mm?)
+Radabstand 115mm
