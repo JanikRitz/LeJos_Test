@@ -7,9 +7,9 @@ import lejos.robotics.navigation.DifferentialPilot;
 public class DifferentialPilotFactory {
 
     public static DifferentialPilot newMasterPilot(){
-        return new DifferentialPilot(35.0, 136.0, Motor.B, Motor.C);
+        return new DifferentialPilot((35.0*(3.0/5.0)/1.1), 136.0, Motor.B, Motor.C);
     }
     public static DifferentialPilot newSlavePilot(){
-        return new DifferentialPilot(56.0, 115.0, Motor.B, Motor.C);
+        return new DifferentialPilot(56.0/1.03, 115.0, Motor.B, Motor.C);
     }
 }
