@@ -12,17 +12,22 @@ public class Rotate_Test implements ButtonListener {
     }
 
     public Rotate_Test() {
-        this.pilot = DifferentialPilotFactory.newMasterPilot();
-        this.pilot.setTravelSpeed(10);
+        //this.pilot = DifferentialPilotFactory.newMasterPilot();
+        this.pilot = DifferentialPilotFactory.newSlavePilot();
+        this.pilot.setTravelSpeed(25);
         Button.ESCAPE.addButtonListener(this);
     }
 
     private void main_loop() {
         while (true) {
-            pilot.rotate(90); // -> ~45 degrees
-            msDelay(5000);
-            pilot.travel(50);
-            pilot.travel(-50);
+            //pilot.rotate(90); // -> ~45 degrees
+            LCD.drawString("Starting in 3 seconds",1,1);
+            msDelay(3000);
+            LCD.clear();
+            LCD.drawString("Starting",1,1);
+            pilot.travel(100);
+            msDelay(3000);
+            pilot.travel(-100);
         }
     }
 
