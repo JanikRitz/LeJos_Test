@@ -12,7 +12,7 @@ public class Rotate_Test implements ButtonListener {
     }
 
     public Rotate_Test() {
-        this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
+        this.pilot = DifferentialPilotFactory.newMasterPilot();
         this.pilot.setTravelSpeed(10);
         Button.ESCAPE.addButtonListener(this);
     }
