@@ -25,3 +25,9 @@ Slave Robot
 Keine Übersetzung
 Raddurchmesser: 56mm (55mm?)
 Radabstand 115mm
+
+
+Spielfeld
+    Zelle: 300mm x 300mm (x, y)
+    Hindernisse: 150mm x 150mm x 100mm (x, y, z), mit Boden, rot
+    Gesamtgröße: 5-10 Felder quadratisch/rechteckig
