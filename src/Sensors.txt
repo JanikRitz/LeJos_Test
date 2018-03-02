@@ -24,8 +24,8 @@ Slave Robot
     C          Rechts
 Keine Übersetzung
 Raddurchmesser: 56mm (55mm?)
-Radabstand 115mm
-
+Radabstand: 115mm (eher 113-114?)
+pilot.travel(100) --> 155mm
 
 Spielfeld
     Zelle: 300mm x 300mm (x, y)
