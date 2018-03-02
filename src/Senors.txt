@@ -1,0 +1,22 @@
+
+Main Robot (Janik)
+    Port       Device
+    1          Ultraschall
+    2          Farbsensor
+    3          Berührungssensor
+    4          -
+    A          -
+    B          Links
+    C          Rechts
+Übersetzung: 3:1
+
+Slave Robot
+    Port       Device
+    1          Ultraschall
+    2          Farbsensor
+    3          Berührungssensor
+    4          -
+    A          -
+    B          Links
+    C          Rechts
+Keine Übersetzung
