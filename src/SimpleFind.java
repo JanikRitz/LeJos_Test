@@ -10,9 +10,6 @@ import static lejos.util.Delay.msDelay;
 public class SimpleFind implements ButtonListener {
     private static final double NORMAL_SPEED = 100;
     private static final double SLOW_SPEED = 20;
-    private static final int MIN_RADIUS = 60;
-    private static final int MIN_ANGLE = 45;
-    public static final int ANGLE = 180;
 
     Boolean exit;
     Random random;
@@ -34,24 +31,20 @@ public class SimpleFind implements ButtonListener {
         this.touchSensor = new TouchSensor(SensorPort.S3);
 
         //this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
-        //this.pilot = DifferentialPilotFactory.newMasterPilot();
-        this.pilot = DifferentialPilotFactory.newSlavePilot();
+        this.pilot = DifferentialPilotFactory.newMasterPilot();
+        //this.pilot = DifferentialPilotFactory.newSlavePilot();
         this.pilot.setTravelSpeed(NORMAL_SPEED);
         this.random = new Random();
         Button.ESCAPE.addButtonListener(this);
     }
 
     private void mainLoop() {
-        int loops = 0;
-
         while (!this.exit) {
             showColorDistance(this.color_sensor, this.sonic_sensor);
 
             if (this.sonic_sensor.getDistance() > 15) {
 
-                //if (this.pilot.getTravelSpeed() != NORMAL_SPEED || loops % 20 == 0 || !this.pilot.isMoving())
                 if (this.pilot.getTravelSpeed() != NORMAL_SPEED || !this.pilot.isMoving()) {
-                    //arcForwardRandom();
                     this.pilot.setTravelSpeed(NORMAL_SPEED);
                     pilot.forward();
                 }
@@ -75,7 +68,7 @@ public class SimpleFind implements ButtonListener {
                 if (reds > 0) {
                     LCD.clear();
                     LCD.drawString("Ready", 2, 2);
-                    LCD.drawInt(reds, 4, 2);
+                    LCD.drawInt(reds, 2, 4);
                     Button.waitForAnyPress();
                 } else {
                     reverse(100);
@@ -84,33 +77,6 @@ public class SimpleFind implements ButtonListener {
             }
 
             msDelay(100);
-            loops++;
-        }
-    }
-
-    private void arcForwardRandom() {
-        this.pilot.setTravelSpeed(NORMAL_SPEED);
-
-        int decision = random.nextInt(101);
-        decision = Math.max(decision - 50, 0);
-        if (decision == 0) {
-            pilot.forward();
-        } else {
-            decision = decision - 25;
-            if (decision < 0) {
-                pilot.arcForward(decision - MIN_RADIUS);
-            } else {
-                pilot.arcForward(decision + MIN_RADIUS);
-            }
-        }
-    }
-
-    private void rotateRandom() {
-        int decision = this.random.nextInt(2 * ANGLE + 1) - ANGLE;
-        if (decision < 0) {
-            pilot.rotate(decision - MIN_ANGLE);
-        } else {
-            pilot.rotate(decision + MIN_ANGLE);
         }
     }
 
@@ -120,16 +86,16 @@ public class SimpleFind implements ButtonListener {
         pilot.travel(-i);
     }
 
-    private void showColorDistance(ColorSensor color_sensor, UltrasonicSensor sonic) {
+    private void showColorDistance(ColorSensor colorSensor, UltrasonicSensor sonic) {
         LCD.clear();
-        ColorSensor.Color c = color_sensor.getColor();
+        ColorSensor.Color c = colorSensor.getColor();
 
         int left = 0;
-        int right = MIN_RADIUS;
+        int right = 10;
 
         int line = 1;
         LCD.drawString("Color:", left, line);
-        this.showColor(color_sensor, right, line);
+        this.showColor(colorSensor, right, line);
         line += 2;
 
         LCD.drawString("Distance:", left, line);
