@@ -34,7 +34,8 @@ public class SimpleFind implements ButtonListener {
         this.touchSensor = new TouchSensor(SensorPort.S3);
 
         //this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
-        this.pilot = DifferentialPilotFactory.newMasterPilot();
+        //this.pilot = DifferentialPilotFactory.newMasterPilot();
+        this.pilot = DifferentialPilotFactory.newSlavePilot();
         this.pilot.setTravelSpeed(NORMAL_SPEED);
         this.random = new Random();
         Button.ESCAPE.addButtonListener(this);
@@ -66,14 +67,15 @@ public class SimpleFind implements ButtonListener {
 
                 this.pilot.stop();
 
-                List<Integer> colors = new ArrayList<Integer>();
-                for(int i=0; i < 5; i++){
-                    colors.add(this.color_sensor.getColorID());
+                int reds = 0;
+                for (int i = 0; i < 5; i++) {
+                    if (this.color_sensor.getColorID() == ColorSensor.Color.RED) reds++;
                     msDelay(50);
                 }
-                if (colors.contains(ColorSensor.Color.RED)) {
+                if (reds > 0) {
                     LCD.clear();
                     LCD.drawString("Ready", 2, 2);
+                    LCD.drawInt(reds, 4, 2);
                     Button.waitForAnyPress();
                 } else {
                     reverse(100);
