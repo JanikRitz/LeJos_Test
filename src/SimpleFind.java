@@ -61,19 +61,16 @@ public class SimpleFind implements ButtonListener {
 
             }
             if (touchSensor.isPressed()) {
-                switch (this.color_sensor.getColorID()) {
-                    case ColorSensor.Color.RED:
-                        pilot.stop();
-                        LCD.clear();
-                        LCD.drawString("Ready", 2, 2);
-                        Button.waitForAnyPress();
-                        break;
-                    case ColorSensor.Color.NONE:
-                    case ColorSensor.Color.BLACK:
-                        break;
-                    default:
-                        reverse(50);
-                        pilot.rotate(90);
+
+                this.pilot.stop();
+
+                if (this.color_sensor.getColorID() == ColorSensor.Color.RED) {
+                    LCD.clear();
+                    LCD.drawString("Ready", 2, 2);
+                    Button.waitForAnyPress();
+                } else {
+                    reverse(100);
+                    pilot.rotate(90);
                 }
             }
 
