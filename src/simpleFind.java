@@ -20,8 +20,8 @@ public class simpleFind implements ButtonListener {
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
-        simpleFind c_test = new simpleFind();
-        c_test.mainLoop();
+        simpleFind colorTest = new simpleFind();
+        colorTest.mainLoop();
     }
 
     public simpleFind() {
