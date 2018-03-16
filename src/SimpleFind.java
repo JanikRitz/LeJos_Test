@@ -6,11 +6,11 @@ import java.util.Random;
 import static lejos.util.Delay.msDelay;
 
 public class SimpleFind implements ButtonListener {
-    private static final double NORMAL_SPEED = 20;
-    private static final double SLOW_SPEED = 3;
+    private static final double NORMAL_SPEED = 100;
+    private static final double SLOW_SPEED = 20;
     private static final int MIN_RADIUS = 60;
-    private static final int MIN_ANGLE = 90;
-    public static final int ANGLE = 270;
+    private static final int MIN_ANGLE = 45;
+    public static final int ANGLE = 180;
 
     Boolean exit;
     Random random;
@@ -20,8 +20,8 @@ public class SimpleFind implements ButtonListener {
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
-        SimpleFind colorTest = new SimpleFind();
-        colorTest.mainLoop();
+        SimpleFind find = new SimpleFind();
+        find.mainLoop();
     }
 
     public SimpleFind() {
@@ -31,7 +31,8 @@ public class SimpleFind implements ButtonListener {
         this.color_sensor = new ColorSensor(SensorPort.S2);
         this.touchSensor = new TouchSensor(SensorPort.S3);
 
-        this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
+        //this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
+        this.pilot = DifferentialPilotFactory.newMasterPilot();
         this.pilot.setTravelSpeed(NORMAL_SPEED);
         this.random = new Random();
         Button.ESCAPE.addButtonListener(this);
@@ -45,18 +46,21 @@ public class SimpleFind implements ButtonListener {
 
             if (this.sonic_sensor.getDistance() > 15) {
 
-                if (this.pilot.getTravelSpeed() != NORMAL_SPEED || loops % 20 == 0 || !this.pilot.isMoving()) {
+                //if (this.pilot.getTravelSpeed() != NORMAL_SPEED || loops % 20 == 0 || !this.pilot.isMoving())
+                if (this.pilot.getTravelSpeed() != NORMAL_SPEED || !this.pilot.isMoving()) {
                     //arcForwardRandom();
                     this.pilot.setTravelSpeed(NORMAL_SPEED);
                     pilot.forward();
                 }
-            } else if (this.sonic_sensor.getDistance() > 5) {
+            } else {
 
                 if (this.pilot.getTravelSpeed() != SLOW_SPEED) {
                     this.pilot.setTravelSpeed(SLOW_SPEED);
                     pilot.forward();
                 }
 
+            }
+            if (touchSensor.isPressed()) {
                 switch (this.color_sensor.getColorID()) {
                     case ColorSensor.Color.RED:
                         pilot.stop();
@@ -69,15 +73,8 @@ public class SimpleFind implements ButtonListener {
                         break;
                     default:
                         reverse(50);
-                        pilot.rotate(180);
+                        pilot.rotate(90);
                 }
-            } else {
-                reverse(25);
-                rotateRandom();
-            }
-            if(touchSensor.isPressed()){
-                reverse(25);
-                rotateRandom();
             }
 
             msDelay(100);
@@ -103,7 +100,7 @@ public class SimpleFind implements ButtonListener {
     }
 
     private void rotateRandom() {
-        int decision = this.random.nextInt(2* ANGLE + 1) - ANGLE;
+        int decision = this.random.nextInt(2 * ANGLE + 1) - ANGLE;
         if (decision < 0) {
             pilot.rotate(decision - MIN_ANGLE);
         } else {
