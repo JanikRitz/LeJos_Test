@@ -6,9 +6,12 @@ import static lejos.util.Delay.msDelay;
 public class RotateTest implements ButtonListener {
     DifferentialPilot pilot;
 
+    // Master
     // 1.5 too much
     // 1.35 ok on carpet but not on hardwood floor
     // 1.0 not enough
+    // Slave
+    // Unknown
     static int ANGLE = (int) (90 * (1.4));
 
     public static void main(String[] a) {
