@@ -1,6 +1,8 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static lejos.util.Delay.msDelay;
@@ -64,7 +66,12 @@ public class SimpleFind implements ButtonListener {
 
                 this.pilot.stop();
 
-                if (this.color_sensor.getColorID() == ColorSensor.Color.RED) {
+                List<Integer> colors = new ArrayList<Integer>();
+                for(int i=0; i < 5; i++){
+                    colors.add(this.color_sensor.getColorID());
+                    msDelay(50);
+                }
+                if (colors.contains(ColorSensor.Color.RED)) {
                     LCD.clear();
                     LCD.drawString("Ready", 2, 2);
                     Button.waitForAnyPress();
