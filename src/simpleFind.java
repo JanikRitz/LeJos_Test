@@ -5,7 +5,7 @@ import java.util.Random;
 
 import static lejos.util.Delay.msDelay;
 
-public class Simple_Find implements ButtonListener {
+public class simpleFind implements ButtonListener {
     private static final double NORMAL_SPEED = 20;
     private static final double SLOW_SPEED = 3;
     private static final int MIN_RADIUS = 60;
@@ -20,13 +20,11 @@ public class Simple_Find implements ButtonListener {
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
-        ColorSensor color_sensor = new ColorSensor(SensorPort.S2);
-
-        Simple_Find c_test = new Simple_Find();
-        c_test.main_loop();
+        simpleFind c_test = new simpleFind();
+        c_test.mainLoop();
     }
 
-    public Simple_Find() {
+    public simpleFind() {
         this.exit = false;
 
         this.sonic_sensor = new UltrasonicSensor(SensorPort.S1);
@@ -39,11 +37,11 @@ public class Simple_Find implements ButtonListener {
         Button.ESCAPE.addButtonListener(this);
     }
 
-    private void main_loop() {
+    private void mainLoop() {
         int loops = 0;
 
         while (!this.exit) {
-            show_color_and_distance(this.color_sensor, this.sonic_sensor);
+            showColorDistance(this.color_sensor, this.sonic_sensor);
 
             if (this.sonic_sensor.getDistance() > 15) {
 
@@ -75,11 +73,11 @@ public class Simple_Find implements ButtonListener {
                 }
             } else {
                 reverse(25);
-                rotate_random();
+                rotateRandom();
             }
             if(touchSensor.isPressed()){
                 reverse(25);
-                rotate_random();
+                rotateRandom();
             }
 
             msDelay(100);
@@ -104,7 +102,7 @@ public class Simple_Find implements ButtonListener {
         }
     }
 
-    private void rotate_random() {
+    private void rotateRandom() {
         int decision = this.random.nextInt(2* ANGLE + 1) - ANGLE;
         if (decision < 0) {
             pilot.rotate(decision - MIN_ANGLE);
@@ -119,7 +117,7 @@ public class Simple_Find implements ButtonListener {
         pilot.travel(-i);
     }
 
-    private void show_color_and_distance(ColorSensor color_sensor, UltrasonicSensor sonic) {
+    private void showColorDistance(ColorSensor color_sensor, UltrasonicSensor sonic) {
         LCD.clear();
         ColorSensor.Color c = color_sensor.getColor();
 
@@ -128,7 +126,7 @@ public class Simple_Find implements ButtonListener {
 
         int line = 1;
         LCD.drawString("Color:", left, line);
-        this.show_color(color_sensor, right, line);
+        this.showColor(color_sensor, right, line);
         line += 2;
 
         LCD.drawString("Distance:", left, line);
@@ -144,7 +142,7 @@ public class Simple_Find implements ButtonListener {
         }
     }
 
-    private void show_color(ColorSensor sensor, int row, int column) {
+    private void showColor(ColorSensor sensor, int row, int column) {
         String text = "";
         switch (sensor.getColorID()) {
             case ColorSensor.Color.NONE:
