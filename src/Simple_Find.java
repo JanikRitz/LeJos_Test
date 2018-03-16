@@ -16,6 +16,7 @@ public class Simple_Find implements ButtonListener {
     Random random;
     ColorSensor color_sensor;
     UltrasonicSensor sonic_sensor;
+    TouchSensor touchSensor;
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
@@ -27,8 +28,11 @@ public class Simple_Find implements ButtonListener {
 
     public Simple_Find() {
         this.exit = false;
-        this.color_sensor = new ColorSensor(SensorPort.S2);
+
         this.sonic_sensor = new UltrasonicSensor(SensorPort.S1);
+        this.color_sensor = new ColorSensor(SensorPort.S2);
+        this.touchSensor = new TouchSensor(SensorPort.S3);
+
         this.pilot = new DifferentialPilot(3.0, 14.5, Motor.B, Motor.C, false);
         this.pilot.setTravelSpeed(NORMAL_SPEED);
         this.random = new Random();
@@ -44,20 +48,9 @@ public class Simple_Find implements ButtonListener {
             if (this.sonic_sensor.getDistance() > 15) {
 
                 if (this.pilot.getTravelSpeed() != NORMAL_SPEED || loops % 20 == 0 || !this.pilot.isMoving()) {
+                    //arcForwardRandom();
                     this.pilot.setTravelSpeed(NORMAL_SPEED);
-
-                    int decision = random.nextInt(101);
-                    decision = Math.max(decision - 50, 0);
-                    if (decision == 0) {
-                        pilot.forward();
-                    } else {
-                        decision = decision - 25;
-                        if (decision < 0) {
-                            pilot.arcForward(decision - MIN_RADIUS);
-                        } else {
-                            pilot.arcForward(decision + MIN_RADIUS);
-                        }
-                    }
+                    pilot.forward();
                 }
             } else if (this.sonic_sensor.getDistance() > 5) {
 
@@ -77,27 +70,53 @@ public class Simple_Find implements ButtonListener {
                     case ColorSensor.Color.BLACK:
                         break;
                     default:
-                        pilot.stop();
-                        pilot.setTravelSpeed(NORMAL_SPEED);
-                        pilot.travel(-50);
+                        reverse(50);
                         pilot.rotate(180);
                 }
             } else {
-                pilot.stop();
-                pilot.setTravelSpeed(NORMAL_SPEED);
-                pilot.travel(-25);
-
-                int decision = this.random.nextInt(2* ANGLE + 1) - ANGLE;
-                if (decision < 0) {
-                    pilot.rotate(decision - MIN_ANGLE);
-                } else {
-                    pilot.rotate(decision + MIN_ANGLE);
-                }
-
+                reverse(25);
+                rotate_random();
             }
+            if(touchSensor.isPressed()){
+                reverse(25);
+                rotate_random();
+            }
+
             msDelay(100);
             loops++;
         }
+    }
+
+    private void arcForwardRandom() {
+        this.pilot.setTravelSpeed(NORMAL_SPEED);
+
+        int decision = random.nextInt(101);
+        decision = Math.max(decision - 50, 0);
+        if (decision == 0) {
+            pilot.forward();
+        } else {
+            decision = decision - 25;
+            if (decision < 0) {
+                pilot.arcForward(decision - MIN_RADIUS);
+            } else {
+                pilot.arcForward(decision + MIN_RADIUS);
+            }
+        }
+    }
+
+    private void rotate_random() {
+        int decision = this.random.nextInt(2* ANGLE + 1) - ANGLE;
+        if (decision < 0) {
+            pilot.rotate(decision - MIN_ANGLE);
+        } else {
+            pilot.rotate(decision + MIN_ANGLE);
+        }
+    }
+
+    private void reverse(int i) {
+        pilot.stop();
+        pilot.setTravelSpeed(NORMAL_SPEED);
+        pilot.travel(-i);
     }
 
     private void show_color_and_distance(ColorSensor color_sensor, UltrasonicSensor sonic) {
@@ -180,6 +199,7 @@ public class Simple_Find implements ButtonListener {
     @Override
     public void buttonPressed(Button button) {
         this.exit = true;
+        System.exit(0);
     }
 
     @Override
