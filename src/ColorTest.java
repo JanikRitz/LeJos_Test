@@ -2,31 +2,28 @@ import lejos.nxt.*;
 
 import static lejos.util.Delay.msDelay;
 
-public class Color_Test_L implements ButtonListener{
-    Boolean exit;
-    ColorSensor color_sensor;
+public class ColorTest implements ButtonListener {
+
+    ColorSensor colorSensor;
 
     public static void main(String[] a) {
-        ColorSensor color_sensor = new ColorSensor(SensorPort.S2);
-
-        Color_Test_L c_test = new Color_Test_L();
-        c_test.main_loop();
+        ColorTest colorTest = new ColorTest();
+        colorTest.main_loop();
     }
 
-    public Color_Test_L(){
-        this.exit = false;
-        this.color_sensor = new ColorSensor(SensorPort.S2);
+    public ColorTest(){
+        this.colorSensor = new ColorSensor(SensorPort.S2);
         Button.ESCAPE.addButtonListener(this);
     }
 
     private void main_loop(){
-        while(!this.exit){
-            show_color(this.color_sensor);
+        while(true){
+            show_color(this.colorSensor);
             msDelay(250);
         }
     }
 
-    private void show_color(ColorSensor color_sensor) {
+    private static void show_color(ColorSensor color_sensor) {
         LCD.clear();
         ColorSensor.Color c = color_sensor.getColor();
 
@@ -57,10 +54,9 @@ public class Color_Test_L implements ButtonListener{
          */
     }
 
-
     @Override
     public void buttonPressed(Button button) {
-        this.exit = true;
+        System.exit(0);
     }
 
     @Override
