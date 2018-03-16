@@ -1,16 +1,16 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
-public class Touch_Test implements ButtonListener {
+public class TouchTest implements ButtonListener {
     DifferentialPilot pilot;
     TouchSensor touchSensor;
 
     public static void main(String[] a) {
-        Touch_Test c_test = new Touch_Test();
+        TouchTest c_test = new TouchTest();
         c_test.main_loop();
     }
 
-    public Touch_Test() {
+    public TouchTest() {
         this.pilot = new DifferentialPilot(5.5, 11.5, Motor.B, Motor.C, false);
         this.pilot.setTravelSpeed(12);
 

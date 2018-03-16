@@ -6,7 +6,7 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 import static lejos.util.Delay.msDelay;
 
-public class Object_Avoidance {
+public class ObjectAvoidance {
     public static void main(String args[]) {
         UltrasonicSensor sonic = new UltrasonicSensor(SensorPort.S1);
         DifferentialPilot p = pilot();

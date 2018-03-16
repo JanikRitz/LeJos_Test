@@ -3,15 +3,15 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 import static lejos.util.Delay.msDelay;
 
-public class Rotate_Test implements ButtonListener {
+public class RotateTest implements ButtonListener {
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
-        Rotate_Test c_test = new Rotate_Test();
+        RotateTest c_test = new RotateTest();
         c_test.main_loop();
     }
 
-    public Rotate_Test() {
+    public RotateTest() {
         //this.pilot = DifferentialPilotFactory.newMasterPilot();
         this.pilot = DifferentialPilotFactory.newSlavePilot();
         this.pilot.setTravelSpeed(25);

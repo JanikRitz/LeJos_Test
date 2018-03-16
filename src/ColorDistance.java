@@ -2,18 +2,18 @@ import lejos.nxt.*;
 
 import static lejos.util.Delay.msDelay;
 
-public class Color_Distance implements ButtonListener{
+public class ColorDistance implements ButtonListener{
     ColorSensor color_sensor;
     UltrasonicSensor sonic_sensor;
 
     public static void main(String[] a) {
         ColorSensor color_sensor = new ColorSensor(SensorPort.S2);
 
-        Color_Distance c_test = new Color_Distance();
+        ColorDistance c_test = new ColorDistance();
         c_test.main_loop();
     }
 
-    public Color_Distance(){
+    public ColorDistance(){
         this.color_sensor = new ColorSensor(SensorPort.S1);
         this.sonic_sensor = new UltrasonicSensor(SensorPort.S2);
         Button.ESCAPE.addButtonListener(this);

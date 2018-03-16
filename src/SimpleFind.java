@@ -5,7 +5,7 @@ import java.util.Random;
 
 import static lejos.util.Delay.msDelay;
 
-public class simpleFind implements ButtonListener {
+public class SimpleFind implements ButtonListener {
     private static final double NORMAL_SPEED = 20;
     private static final double SLOW_SPEED = 3;
     private static final int MIN_RADIUS = 60;
@@ -20,11 +20,11 @@ public class simpleFind implements ButtonListener {
     DifferentialPilot pilot;
 
     public static void main(String[] a) {
-        simpleFind colorTest = new simpleFind();
+        SimpleFind colorTest = new SimpleFind();
         colorTest.mainLoop();
     }
 
-    public simpleFind() {
+    public SimpleFind() {
         this.exit = false;
 
         this.sonic_sensor = new UltrasonicSensor(SensorPort.S1);
