@@ -10,7 +10,7 @@ import lejos.nxt.comm.*;
 
 public class BTConnectTest {
     public static void main(String[] args) throws Exception {
-        String name = "GD2017-2"; // TODO correct Name
+        String name = "GD2017-2";
         LCD.drawString("Connecting...", 0, 0);
         RemoteDevice btrd = Bluetooth.getKnownDevice(name);
 
