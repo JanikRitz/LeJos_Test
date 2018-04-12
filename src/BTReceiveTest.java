@@ -5,8 +5,17 @@ import java.io.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 
-public class BTReceiveTest {
+public class BTReceiveTest implements ButtonListener {
     public static void main(String [] args) throws Exception {
+        BTReceiveTest btReceiveTest = new BTReceiveTest();
+        btReceiveTest.mainLoop();
+    }
+
+    public BTReceiveTest(){
+        Button.ESCAPE.addButtonListener(this);
+    }
+
+    private void mainLoop() throws IOException {
         String connected = "Connected";
         String waiting = "Waiting...";
         String closing = "Closing...";
@@ -35,5 +44,12 @@ public class BTReceiveTest {
             connection.close();
             LCD.clear();
         }
+    }
+
+    public void buttonPressed(Button var1) {
+        System.exit(0);
+    }
+
+    public void buttonReleased(Button var1) {
     }
 }
