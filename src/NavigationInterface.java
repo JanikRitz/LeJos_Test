@@ -11,22 +11,24 @@ public interface NavigationInterface {
     public enum Direction{
         NORTH , EAST , SOUTH , WEST ;
 
-        public double degrees(Direction other) throws Exception {
-            if(this.equals(other)){
+        public static double degrees(Direction origin, Direction other) throws Exception {
+            if(origin == other){
                 return (double) 0;
             }
 
-            double angle = other.degrees() - this.degrees();
+            double angle = degrees(other) - degrees(origin);
 
             if(angle > 180){
                 return 360.0 - angle;
-            } else{
+            } else if(angle < -180){
+                return 360.0 + angle;
+            }else{
                 return angle;
             }
         }
 
-        public double degrees() throws Exception {
-            switch (this) {
+        public static double degrees(Direction direction) throws Exception {
+            switch (direction) {
                 case NORTH:
                     return 0;
                 case EAST:
@@ -36,7 +38,8 @@ public interface NavigationInterface {
                 case WEST:
                     return 270;
                 default:
-                    throw new Exception("Direction not supported");
+                    return 0;
+                    // throw new Exception("Direction not supported");
             }
         }
     }
