@@ -3,12 +3,12 @@ import lejos.robotics.navigation.DifferentialPilot;
 /**
  * Created by Isabell on 16.04.2018.
  */
-public class SimpleNavigationPilot implements NavigationInterface{
+public class SimpleNavigationPilot implements NavigationInterface {
 
     private DifferentialPilot pilot;
     private Direction facing;
 
-    public SimpleNavigationPilot(DifferentialPilot pilot){
+    public SimpleNavigationPilot(DifferentialPilot pilot) {
         this.facing = Direction.NORTH;
         this.pilot = pilot;
     }
@@ -20,7 +20,12 @@ public class SimpleNavigationPilot implements NavigationInterface{
 
     @Override
     public void rotateDirection(Direction direction) {
-        double angle = this.facing.degrees(direction);
+        double angle = 0;
+        try {
+            angle = this.facing.degrees(direction);
+        } catch (Exception e){
+            // Use Default 0 degrees
+        }
         pilot.rotate(angle);
     }
 
