@@ -11,6 +11,12 @@ Main Robot (Janik)
 Übersetzung: 3:5 (1:1,67)
 Raddurchmesser: 30mm (35-36mm mit Kette)
 Radabstand: 136mm
+Rotation Korrekturfaktor:
+        // 1.5 too much
+        // 1.35 ok on carpet but not on hardwood floor
+        // 1.0 not enough
+Raddurchmesser Korrekturfaktor (für korrekte Strecken):
+    (35.0*(3.0/5.0)/1.1)
 
 
 Slave Robot
@@ -26,6 +32,8 @@ Keine Übersetzung
 Raddurchmesser: 56mm (55mm?)
 Radabstand: 115mm (eher 113-114?)
 pilot.travel(100) --> 155mm
+Raddurchmesser Korrekturfaktor (für korrekte Strecken):
+    56.0/1.03
 
 Spielfeld
     Zelle: 300mm x 300mm (x, y)
