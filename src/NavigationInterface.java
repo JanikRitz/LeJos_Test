@@ -1,5 +1,3 @@
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
-
 /**
  * Created by Isabell on 16.04.2018.
  */
@@ -13,12 +11,13 @@ public interface NavigationInterface {
     public enum Direction{
         NORTH , EAST , SOUTH , WEST ;
 
-        public double degrees(Direction other){
+        public double degrees(Direction other) throws Exception {
             if(this.equals(other)){
                 return (double) 0;
             }
 
             double angle = other.degrees() - this.degrees();
+
             if(angle > 180){
                 return 360.0 - angle;
             } else{
@@ -26,7 +25,7 @@ public interface NavigationInterface {
             }
         }
 
-        public double degrees(){
+        public double degrees() throws Exception {
             switch (this) {
                 case NORTH:
                     return 0;
@@ -37,7 +36,7 @@ public interface NavigationInterface {
                 case WEST:
                     return 270;
                 default:
-                    throw new ValueException("Direction not supported");
+                    throw new Exception("Direction not supported");
             }
         }
     }
