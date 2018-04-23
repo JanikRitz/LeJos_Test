@@ -28,7 +28,7 @@ public class MapNavigationPilot implements NavigationInterface {
 
         for (int x = 0; x < this.x_size; x++) {
             for (int y = 0; y < this.y_size; y++) {
-                this.map[x][y] = MapObject.FREE
+                this.map[x][y] = MapObject.FREE;
             }
         }
     }
@@ -90,8 +90,8 @@ public class MapNavigationPilot implements NavigationInterface {
         this.rotateDirection(direction);
         return this.driveForward();
     }
-}
 
-public enum MapObject {
-    FREE, OBSTACLE, RESOURCE
+    public enum MapObject {
+        FREE, OBSTACLE, RESOURCE
+    }
 }
