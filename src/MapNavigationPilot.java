@@ -5,6 +5,7 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 public class SimpleNavigationPilot implements NavigationInterface {
 
+    public static final int mapDistance = 200;
     private DifferentialPilot pilot;
     private Direction facing;
     private double angleCorrection;
@@ -38,11 +39,11 @@ public class SimpleNavigationPilot implements NavigationInterface {
         double angle = 0;
         try {
             angle = Direction.degrees(facing, direction);
-        } catch (Exception e){
+        } catch (Exception e) {
             // Use Default 0 degrees
         }
 
-        angle = angle*this.angleCorrection;
+        angle = angle * this.angleCorrection;
         pilot.rotate(angle);
         this.facing = direction;
     }
@@ -59,10 +60,12 @@ public class SimpleNavigationPilot implements NavigationInterface {
 
         // Change Map
 
-        this.x_pos += 0;
-        this.y_pos += 0;
+        this.pilot.travel(mapDistance);
 
-        this.pilot.travel(200);
+        this.x_pos += Direction.xOffset(this.facing);
+        this.y_pos += Direction.yOffset(this.facing);
+
+        this.map[this.x_pos][this.y_pos] = MapObject.FREE;
         return 0;
     }
 
@@ -73,6 +76,6 @@ public class SimpleNavigationPilot implements NavigationInterface {
     }
 }
 
-public enum MapObject(){
+public enum MapObject {
     FREE, OBSTACLE, RESOURCE
-        }
+}
