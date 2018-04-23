@@ -1,5 +1,7 @@
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
+import lejos.nxt.SensorPort;
+import lejos.nxt.SensorPortListener;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
@@ -82,6 +84,11 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     public int driveDirection(Direction direction) {
         this.rotateDirection(direction);
         return this.driveForward();
+    }
+
+    @Override
+    public void stateChanged(SensorPort sensorPort, int i, int i1) {
+
     }
 
     public enum MapObject {
