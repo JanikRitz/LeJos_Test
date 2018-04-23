@@ -3,7 +3,8 @@ import lejos.nxt.LCD;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
-public class SimpleNavigationPilot implements NavigationInterface {
+public class MapNavigationPilot implements NavigationInterface {
+
 
     public static final int mapDistance = 200;
     private DifferentialPilot pilot;
@@ -15,7 +16,7 @@ public class SimpleNavigationPilot implements NavigationInterface {
     private int y_pos;
     private MapObject[][] map;
 
-    public SimpleNavigationPilot(DifferentialPilot pilot, double angleCorrection, int x_size, int y_size, int x_start, int y_start) {
+    public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection, int x_size, int y_size, int x_start, int y_start) {
         this.facing = Direction.NORTH;
         this.pilot = pilot;
         this.angleCorrection = angleCorrection;
