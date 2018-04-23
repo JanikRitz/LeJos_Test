@@ -5,7 +5,6 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 public class MapNavigationPilot implements NavigationInterface {
 
-
     public static final int mapDistance = 200;
     private DifferentialPilot pilot;
     private Direction facing;
@@ -54,17 +53,29 @@ public class MapNavigationPilot implements NavigationInterface {
         // TODO implement correct stuff
 
         // Check in map
+        int newXPos = this.x_pos + Direction.xOffset(this.facing);
+        int newYPos = this.y_pos + Direction.yOffset(this.facing);
+
+        switch (this.map[newXPos][newYPos]) {
+            case FREE:
+                break;
+            case OBSTACLE:
+                // Obstacle was already found, cant't drive in that direction
+                return -1; // TODO correct Error Code
+            case RESOURCE:
+                // Resource was already found, no new resources can be gathered
+                return -1; // TODO correct Error Code,
+        }
 
         // Drive and wait for sensors
+        this.pilot.travel(mapDistance);
 
         // React to Sensor input
 
         // Change Map
 
-        this.pilot.travel(mapDistance);
-
-        this.x_pos += Direction.xOffset(this.facing);
-        this.y_pos += Direction.yOffset(this.facing);
+        this.x_pos = newXPos;
+        this.y_pos = newYPos;
 
         this.map[this.x_pos][this.y_pos] = MapObject.FREE;
         return 0;
