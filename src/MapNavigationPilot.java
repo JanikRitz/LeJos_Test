@@ -26,7 +26,11 @@ public class MapNavigationPilot implements NavigationInterface {
         this.x_pos = x_start;
         this.y_pos = y_start;
 
-        this.map = [this.x_size][this.y_size]; // TODO Init MAP
+        for (int x = 0; x < this.x_size; x++) {
+            for (int y = 0; y < this.y_size; y++) {
+                this.map[x][y] = MapObject.FREE
+            }
+        }
     }
 
     @Override
