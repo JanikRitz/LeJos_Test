@@ -60,15 +60,9 @@ public class MapNavigationPilot implements NavigationInterface {
         int newXPos = this.x_pos + Direction.xOffset(this.facing);
         int newYPos = this.y_pos + Direction.yOffset(this.facing);
 
-        switch (this.map[newXPos][newYPos]) {
-            case FREE:
-                break;
-            case OBSTACLE:
-                // Obstacle was already found, cant't drive in that direction
-                return -1; // TODO correct Error Code
-            case RESOURCE:
-                // Resource was already found, no new resources can be gathered
-                return -1; // TODO correct Error Code,
+        if (this.map[newXPos][newYPos] != MapObject.FREE) {
+            return -1;
+            // Or other Error Code like this.map[newXPos][newYPos]
         }
 
         // Drive and wait for sensors
@@ -76,8 +70,7 @@ public class MapNavigationPilot implements NavigationInterface {
 
         // React to Sensor input
 
-        // Change Map
-
+        // Change Map and Pilot
         this.x_pos = newXPos;
         this.y_pos = newYPos;
 
