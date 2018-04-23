@@ -3,7 +3,7 @@ import lejos.nxt.LCD;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
-public class MapNavigationPilot implements NavigationInterface {
+public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
 
     public static final int mapDistance = 200;
     private DifferentialPilot pilot;
