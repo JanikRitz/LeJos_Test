@@ -13,7 +13,7 @@ public class SimpleNavigationPilot implements NavigationInterface {
     private int x_pos;
     private int y_size;
     private int y_pos;
-    private int[][] map;
+    private MapObject[][] map;
 
     public SimpleNavigationPilot(DifferentialPilot pilot, double angleCorrection, int x_size, int y_size, int x_start, int y_start) {
         this.facing = Direction.NORTH;
