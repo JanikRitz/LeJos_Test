@@ -42,5 +42,35 @@ public interface NavigationInterface {
                     // throw new Exception("Direction not supported");
             }
         }
+
+        public static int xOffset(Direction direction){
+            switch (direction) {
+                case NORTH:
+                    return 0;
+                case EAST:
+                    return 1;
+                case SOUTH:
+                    return 0;
+                case WEST:
+                    return -1;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int yOffset(Direction direction){
+            switch (direction) {
+                case NORTH:
+                    return 1;
+                case EAST:
+                    return 0;
+                case SOUTH:
+                    return -1;
+                case WEST:
+                    return 0;
+                default:
+                    return 0;
+            }
+        }
     }
 }
