@@ -1,7 +1,4 @@
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.SensorPort;
-import lejos.nxt.SensorPortListener;
+import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
@@ -11,25 +8,32 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     private DifferentialPilot pilot;
     private Direction facing;
     private double angleCorrection;
-    private int x_size;
     private int x_pos;
-    private int y_size;
     private int y_pos;
+    private UltrasonicSensor distanceSensor;
+    private ColorSensor colorSensor;
+    private TouchSensor touchSensor;
     private MapObject[][] map;
 
-    public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection, int x_size, int y_size, int x_start, int y_start) {
+    public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection,
+                              SensorPort distancePort, SensorPort colorPort, SensorPort touchPort,
+                              int xSize, int ySize, int x_start, int y_start) {
         this.facing = Direction.NORTH;
         this.pilot = pilot;
         this.angleCorrection = angleCorrection;
 
-        this.x_size = x_size;
-        this.y_size = y_size;
+        this.distanceSensor = new UltrasonicSensor(distancePort);
+        this.colorSensor = new ColorSensor(colorPort);
+        this.touchSensor = new TouchSensor(touchPort);
+
+        touchPort.addSensorPortListener(this);
+        distancePort.addSensorPortListener(this);
 
         this.x_pos = x_start;
         this.y_pos = y_start;
 
-        for (int x = 0; x < this.x_size; x++) {
-            for (int y = 0; y < this.y_size; y++) {
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
                 this.map[x][y] = MapObject.FREE;
             }
         }
@@ -87,8 +91,10 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     }
 
     @Override
-    public void stateChanged(SensorPort sensorPort, int i, int i1) {
-
+    public void stateChanged(SensorPort sensorPort, int oldValue, int newValue) {
+        // TODO Implement Actions for
+        // TODO Touch Sensor
+        // TODO Ultrasonic Sensor
     }
 
     public enum MapObject {
