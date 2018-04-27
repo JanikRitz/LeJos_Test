@@ -80,7 +80,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         this.x_pos = newXPos;
         this.y_pos = newYPos;
 
-        this.map[this.x_pos][this.y_pos] = MapObject.FREE;
+        this.modifyMap(this.x_pos, this.y_pos, MapObject.FREE.ordinal());
         return 0;
     }
 
@@ -88,6 +88,11 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     public int driveDirection(Direction direction) {
         this.rotateDirection(direction);
         return this.driveForward();
+    }
+
+    public synchronized void modifyMap(int x, int y, int type){
+        // this.map[x][y] = MapObject(type);
+        // TODO Conversion
     }
 
     @Override
@@ -98,6 +103,10 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     }
 
     public enum MapObject {
-        FREE, OBSTACLE, RESOURCE
+        FREE(0), OBSTACLE(1), RESOURCE(2);
+
+        MapObject(int type) {
+
+        }
     }
 }
