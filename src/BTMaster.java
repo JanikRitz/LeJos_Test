@@ -1,12 +1,9 @@
-import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
-import lejos.nxt.comm.NXTConnection;
 
 import javax.bluetooth.RemoteDevice;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Queue;
 
 public class BTMaster implements Runnable{
@@ -36,9 +33,9 @@ public class BTMaster implements Runnable{
 
         while(true){
             // TODO receive and send Data
-            if (BTSlave.sendData(outputStream, this.data)) return -4;
+            if (BTMapComm.sendData(outputStream, this.data)) return -4;
 
-            BTSlave.receiveData(inputStream, this.pilot);
+            BTMapComm.receiveData(inputStream, this.pilot);
             // TODO wait
         }
     }
