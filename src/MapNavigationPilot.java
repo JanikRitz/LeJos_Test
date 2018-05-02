@@ -1,6 +1,8 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
+import static lejos.util.Delay.msDelay;
+
 
 public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
 
@@ -14,10 +16,12 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     private ColorSensor colorSensor;
     private TouchSensor touchSensor;
     private MapObject[][] map;
+    private BTGeneric communicator;
 
     public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection,
                               SensorPort distancePort, SensorPort colorPort, SensorPort touchPort,
-                              int xSize, int ySize, int x_start, int y_start) {
+                              int xSize, int ySize, int x_start, int y_start,
+                              BTGeneric communicator) {
         this.facing = Direction.NORTH;
         this.pilot = pilot;
         this.angleCorrection = angleCorrection;
@@ -32,11 +36,15 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         this.x_pos = x_start;
         this.y_pos = y_start;
 
+        this.communicator = communicator;
+
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
                 this.map[x][y] = MapObject.FREE;
             }
         }
+
+        new Thread(this.communicator).start();
     }
 
     @Override
@@ -72,15 +80,32 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         }
 
         // Drive and wait for sensors
-        this.pilot.travel(mapDistance);
+        this.pilot.travel(mapDistance, true);
+        while (!touchSensor.isPressed() && this.pilot.isMoving()) ;
+        // TODO add slow-down with Ultrasonic
+        this.pilot.stop();
 
-        // React to Sensor input
+        if (touchSensor.isPressed()) {
+            int reds = 0;
+            for (int i = 0; i < 5; i++) {
+                if (this.colorSensor.getColorID() == ColorSensor.Color.RED) reds++;
+                msDelay(50);
+            }
+            if (reds >= 0) {
+                // Found Resource
+                this.modifyMap(newXPos, newYPos, MapObject.RESOURCE.ordinal());
+            } else{
+                // Found Obstacle
+                this.modifyMap(newXPos, newYPos, MapObject.OBSTACLE.ordinal());
+            }
+            this.pilot.travel(-this.pilot.getMovementIncrement());
+        } else {
+            // Change Map and Pilot
+            this.x_pos = newXPos;
+            this.y_pos = newYPos;
 
-        // Change Map and Pilot
-        this.x_pos = newXPos;
-        this.y_pos = newYPos;
-
-        this.modifyMap(this.x_pos, this.y_pos, MapObject.FREE.ordinal());
+            this.modifyMap(this.x_pos, this.y_pos, MapObject.FREE.ordinal());
+        }
         return 0;
     }
 
@@ -90,9 +115,9 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         return this.driveForward();
     }
 
-    public synchronized void modifyMap(int x, int y, int type){
-        // this.map[x][y] = MapObject(type);
-        // TODO Conversion
+    public synchronized void modifyMap(int x, int y, int type) {
+        this.map[x][y] = MapObject.values()[type];
+        this.communicator.addObject(x, y, MapObject.values()[type]);
     }
 
     @Override
@@ -100,13 +125,10 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         // TODO Implement Actions for
         // TODO Touch Sensor
         // TODO Ultrasonic Sensor
+        // Is this necessary?
     }
 
     public enum MapObject {
-        FREE(0), OBSTACLE(1), RESOURCE(2);
-
-        MapObject(int type) {
-
-        }
+        FREE, OBSTACLE, RESOURCE
     }
 }
