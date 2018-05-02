@@ -7,8 +7,9 @@ import static lejos.util.Delay.msDelay;
 public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
 
     public static final int mapDistance = 200;
-    private static final double NORMAL_SPEED = 20; // TODO correct value
+    private static final double NORMAL_SPEED = 25; // TODO correct value
     private static final double SLOW_SPEED = 10; // TODO correct value
+    public static final int MEASURE_ITERS = 5;
     private DifferentialPilot pilot;
     private Direction facing;
     private double angleCorrection;
@@ -91,17 +92,17 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
                 this.pilot.setTravelSpeed(SLOW_SPEED);
             }
         }
-        // TODO add slow-down with Ultrasonic
+
         this.pilot.stop();
         this.pilot.setTravelSpeed(NORMAL_SPEED);
 
         if (touchSensor.isPressed()) {
             int reds = 0;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < MEASURE_ITERS; i++) {
                 if (this.colorSensor.getColorID() == ColorSensor.Color.RED) reds++;
                 msDelay(50);
             }
-            if (reds >= 0) {
+            if (reds >= MEASURE_ITERS/2) {
                 // Found Resource
                 this.modifyMap(newXPos, newYPos, MapObject.RESOURCE.ordinal());
             } else{
