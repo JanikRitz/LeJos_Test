@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Queue;
 
-public class BTMaster implements Runnable{
+public class BTMaster implements BTGeneric{
     private final String other_nxt;
     private MapNavigationPilot pilot;
     private Queue<Integer> data;

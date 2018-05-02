@@ -5,7 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Queue;
 
-public class BTSlave implements Runnable{
+public class BTSlave implements BTGeneric {
     private final String other_nxt;
     private MapNavigationPilot pilot;
     private Queue<Integer> data;
@@ -16,6 +16,7 @@ public class BTSlave implements Runnable{
         this.other_nxt = name_other;
     }
 
+    @Override
     public int commLoop(){
         // TODO connect
 
@@ -36,6 +37,7 @@ public class BTSlave implements Runnable{
         }
     }
 
+    @Override
     public void addObject(int x, int y, MapNavigationPilot.MapObject object){
         this.data.add(x);
         this.data.add(y);
