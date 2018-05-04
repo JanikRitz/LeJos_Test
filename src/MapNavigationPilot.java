@@ -1,8 +1,6 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
-import java.util.Random;
-
 import static lejos.util.Delay.msDelay;
 
 
