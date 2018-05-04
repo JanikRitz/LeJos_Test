@@ -5,7 +5,6 @@ import javax.bluetooth.RemoteDevice;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class BTMaster implements BTGeneric {
     private final String other_nxt;
@@ -15,7 +14,7 @@ public class BTMaster implements BTGeneric {
 
     public BTMaster(String name_other) {
         this.other_nxt = name_other;
-        this.data = new ArrayBlockingQueue<Integer>(20);
+        this.data = new Queue<Integer>();
     }
 
     public void init(MapNavigationPilot pilot) {
@@ -23,8 +22,6 @@ public class BTMaster implements BTGeneric {
     }
 
     public int commLoop() {
-        // TODO connect
-
         RemoteDevice remoteDevice = Bluetooth.getKnownDevice(this.other_nxt);
 
         if (remoteDevice == null) return -2;
@@ -37,7 +34,6 @@ public class BTMaster implements BTGeneric {
         DataOutputStream outputStream = connection.openDataOutputStream();
 
         while (true) {
-            // TODO receive and send Data
             if (BTMapComm.sendData(outputStream, this.data)) return -4;
 
             BTMapComm.receiveData(inputStream, this.pilot);
@@ -46,9 +42,9 @@ public class BTMaster implements BTGeneric {
     }
 
     public void addObject(int x, int y, MapNavigationPilot.MapObject object) {
-        this.data.add(x);
-        this.data.add(y);
-        this.data.add(object.ordinal()); // TODO Check for correctness
+        this.data.push(x);
+        this.data.push(y);
+        this.data.push(object.ordinal()); // TODO Check for correctness
     }
 
     @Override

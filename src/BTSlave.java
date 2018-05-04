@@ -4,7 +4,6 @@ import lejos.nxt.comm.NXTConnection;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class BTSlave implements BTGeneric {
     private final String other_nxt;
@@ -14,7 +13,7 @@ public class BTSlave implements BTGeneric {
 
     public BTSlave(String name_other) {
         this.other_nxt = name_other;
-        this.data = new ArrayBlockingQueue<Integer>(20);
+        this.data = new Queue<Integer>();
     }
 
     public void init(MapNavigationPilot pilot) {
@@ -23,8 +22,6 @@ public class BTSlave implements BTGeneric {
 
     @Override
     public int commLoop() {
-        // TODO connect
-
         NXTConnection connection = Bluetooth.waitForConnection();
 
         if (connection == null) return -3;
@@ -33,7 +30,6 @@ public class BTSlave implements BTGeneric {
         DataOutputStream outputStream = connection.openDataOutputStream();
 
         while (true) {
-            // TODO receive and send Data
             BTMapComm.receiveData(inputStream, this.pilot);
 
             if (BTMapComm.sendData(outputStream, this.data)) return -4;
@@ -44,9 +40,9 @@ public class BTSlave implements BTGeneric {
 
     @Override
     public void addObject(int x, int y, MapNavigationPilot.MapObject object) {
-        this.data.add(x);
-        this.data.add(y);
-        this.data.add(object.ordinal()); // TODO Check for correctness
+        this.data.push(x);
+        this.data.push(y);
+        this.data.push(object.ordinal()); // TODO Check for correctness
     }
 
     @Override

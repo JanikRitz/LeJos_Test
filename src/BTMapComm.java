@@ -7,9 +7,9 @@ public class BTMapComm {
     static boolean sendData(DataOutputStream outputStream, Queue<Integer> data) {
         try {
             if(data.size() >= 3) {
-                outputStream.writeInt(data.remove()); // X
-                outputStream.writeInt(data.remove()); // Y
-                outputStream.writeInt(data.remove()); // Type
+                outputStream.writeInt((int) data.pop()); // X
+                outputStream.writeInt((int) data.pop()); // Y
+                outputStream.writeInt((int) data.pop()); // Type
                 outputStream.flush();
             }
         } catch (IOException ioe) {
