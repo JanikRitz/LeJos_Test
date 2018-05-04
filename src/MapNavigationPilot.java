@@ -49,6 +49,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
             }
         }
 
+        this.communicator.init(this);
         new Thread(this.communicator).start();
     }
 
