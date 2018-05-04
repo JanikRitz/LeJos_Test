@@ -8,15 +8,17 @@ import static lejos.util.Delay.msDelay;
 
 public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
 
-    public static final int mapDistance = 200;
-    private static final double NORMAL_SPEED = 25; // TODO correct value
-    private static final double SLOW_SPEED = 10; // TODO correct value
+    public static final int mapDistance = 300;
+    private static final double NORMAL_SPEED = 50; // TODO correct value
+    private static final double SLOW_SPEED = 20; // TODO correct value
     public static final int MEASURE_ITERS = 5;
     private DifferentialPilot pilot;
     private Direction facing;
     private double angleCorrection;
     private int x_pos;
     private int y_pos;
+    private int xSize;
+    private int ySize;
     private UltrasonicSensor distanceSensor;
     private ColorSensor colorSensor;
     private TouchSensor touchSensor;
@@ -41,7 +43,12 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         this.x_pos = x_start;
         this.y_pos = y_start;
 
+        this.xSize = xSize;
+        this.ySize = ySize;
+
         this.communicator = communicator;
+
+        this.map = new MapObject[xSize][ySize];
 
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
@@ -80,7 +87,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         int newXPos = this.x_pos + Direction.xOffset(this.facing);
         int newYPos = this.y_pos + Direction.yOffset(this.facing);
 
-        if(newXPos > this.map.length || newYPos > this.map[0].length) return -4;
+        if (newXPos > xSize || newXPos < 0 || newYPos > ySize || newYPos < 0) return -4;
 
         if (this.map[newXPos][newYPos] != MapObject.FREE) {
             return -1;
@@ -89,7 +96,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
 
         // Drive and wait for sensors
         this.pilot.travel(mapDistance, true);
-        while (!touchSensor.isPressed() && this.pilot.isMoving()){
+        while (!touchSensor.isPressed() && this.pilot.isMoving()) {
             // Regulate Speed
             if (this.distanceSensor.getDistance() > 15) {
                 this.pilot.setTravelSpeed(NORMAL_SPEED);
@@ -104,15 +111,23 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         if (touchSensor.isPressed()) {
             int reds = 0;
             for (int i = 0; i < MEASURE_ITERS; i++) {
-                if (this.colorSensor.getColorID() == ColorSensor.Color.RED) reds++;
+                int color = this.colorSensor.getColorID();
+
+                // Only works in a dark room
+                if (color == ColorSensor.Color.RED) reds++;
                 msDelay(50);
             }
-            if (reds >= MEASURE_ITERS/2) {
+
+            if (reds >= MEASURE_ITERS / 2) {
                 // Found Resource
                 this.modifyMap(newXPos, newYPos, MapObject.RESOURCE.ordinal());
-            } else{
+                LCD.drawString("Found Something", 1, 1);
+                Sound.playTone(1000, 1);
+                Button.waitForAnyPress(2000);
+            } else {
                 // Found Obstacle
                 this.modifyMap(newXPos, newYPos, MapObject.OBSTACLE.ordinal());
+                Sound.playTone(2000, 1);
             }
             this.pilot.travel(-this.pilot.getMovementIncrement());
         } else {
@@ -131,10 +146,14 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         return this.driveForward();
     }
 
-    public int driveRandomDirection(){
+    public int driveRandomDirection() {
         Direction direction;
         direction = Direction.random();
-        if(this.map[this.x_pos + Direction.xOffset(direction)][this.x_pos + Direction.yOffset(direction)] == MapObject.OBSTACLE)
+        int newXPos = this.x_pos + Direction.xOffset(direction);
+        int newYPos = this.y_pos + Direction.yOffset(direction);
+
+        if (newXPos > xSize || newXPos < 0 || newYPos > ySize || newYPos < 0) return -4;
+        if (this.map[newXPos][newYPos] == MapObject.OBSTACLE)
             direction = Direction.random();
 
         return this.driveDirection(direction);

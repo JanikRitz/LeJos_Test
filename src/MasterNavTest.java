@@ -25,6 +25,10 @@ public class MasterNavTest implements ButtonListener {
         BTGeneric communicator = new BTMaster("GD2017-2");
 
         MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.35, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 0, 0, communicator);
+
+        while(true){
+            mapNavigationPilot.driveRandomDirection();
+        }
     }
 
     public void mainLoop() {
