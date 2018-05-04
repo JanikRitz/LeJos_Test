@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Created by Isabell on 16.04.2018.
  */
@@ -10,6 +12,11 @@ public interface NavigationInterface {
 
     public enum Direction{
         NORTH , EAST , SOUTH , WEST ;
+
+        public static Direction random(){
+            Random random = new Random();
+            return Direction.values()[random.nextInt(Direction.values().length)];
+        }
 
         public static double degrees(Direction origin, Direction other) throws Exception {
             if(origin == other){
