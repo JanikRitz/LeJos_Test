@@ -7,8 +7,8 @@ import static lejos.util.Delay.msDelay;
 public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
 
     public static final int mapDistance = 300;
-    private static final double NORMAL_SPEED = 50; // TODO correct value
-    private static final double SLOW_SPEED = 20; // TODO correct value
+    private static final double NORMAL_SPEED = 60; // TODO correct value
+    private static final double SLOW_SPEED = 25; // TODO correct value
     public static final int MEASURE_ITERS = 5;
     private DifferentialPilot pilot;
     private Direction facing;
