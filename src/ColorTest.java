@@ -18,8 +18,9 @@ public class ColorTest implements ButtonListener {
 
     private void main_loop(){
         while(true){
+            Sound.playTone(1000, 1);
             show_color(this.colorSensor);
-            msDelay(250);
+            msDelay(500);
         }
     }
 
