@@ -1,6 +1,8 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
+import java.util.Random;
+
 import static lejos.util.Delay.msDelay;
 
 
@@ -77,6 +79,8 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         int newXPos = this.x_pos + Direction.xOffset(this.facing);
         int newYPos = this.y_pos + Direction.yOffset(this.facing);
 
+        if(newXPos > this.map.length || newYPos > this.map[0].length) return -4;
+
         if (this.map[newXPos][newYPos] != MapObject.FREE) {
             return -1;
             // Or other Error Code like this.map[newXPos][newYPos]
@@ -124,6 +128,15 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     public int driveDirection(Direction direction) {
         this.rotateDirection(direction);
         return this.driveForward();
+    }
+
+    public int driveRandomDirection(){
+        Direction direction;
+        direction = Direction.random();
+        if(this.map[this.x_pos + Direction.xOffset(direction)][this.x_pos + Direction.yOffset(direction)] == MapObject.OBSTACLE)
+            direction = Direction.random();
+
+        return this.driveDirection(direction);
     }
 
     public synchronized void modifyMap(int x, int y, int type) {
