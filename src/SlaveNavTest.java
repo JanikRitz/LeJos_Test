@@ -4,31 +4,30 @@
 
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
-import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.comm.LCP;
-import lejos.nxt.comm.LCPMessageListener;
 import lejos.robotics.navigation.DifferentialPilot;
 
 import static lejos.util.Delay.msDelay;
 
-public class MasterNavTest implements ButtonListener {
+public class SlaveNavTest implements ButtonListener {
     public static void main(String[] args) {
-        new MasterNavTest();
+        new SlaveNavTest();
     }
 
-    public MasterNavTest() {
+    public SlaveNavTest() {
         Button.ESCAPE.addButtonListener(this);
-        DifferentialPilot pilot = DifferentialPilotFactory.newMasterPilot();
+        DifferentialPilot pilot = DifferentialPilotFactory.newSlavePilot();
 
-        BTGeneric communicator = new BTMaster("GD2017-2");
+        BTGeneric communicator = new BTSlave("NXT"); //TODO real name
 
-        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.35, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 0, 0, communicator);
+        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.35, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 0, 0, communicator); //TODO correct angleCorrection
 
         while (true) {
             mapNavigationPilot.driveIntelligent();
         }
     }
+
 
     @Override
     public void buttonPressed(Button button) {
