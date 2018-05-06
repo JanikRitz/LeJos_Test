@@ -1,3 +1,5 @@
+import lejos.nxt.LCD;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class BTMapComm {
                 outputStream.writeInt(-1); // Type
                 outputStream.flush();
             }
+            LCD.drawString("Sent     ", 1, 4);
         } catch (IOException ioe) {
             return true;
         }
@@ -30,6 +33,7 @@ public class BTMapComm {
             int type = inputStream.readInt();
             if(x == -1 || y == -1 || type == -1) return;
             pilot.modifyMap(x, y, type);
+            LCD.drawString("Received ", 1, 4);
         } catch (IOException ioe) {
             // No Data, is Ok, try later
         }
