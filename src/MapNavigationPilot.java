@@ -1,6 +1,9 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
+import java.util.Map;
+import java.util.Random;
+
 import static lejos.util.Delay.msDelay;
 
 
@@ -77,20 +80,71 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         this.facing = direction;
     }
 
+    public MapObject testPosition(int x, int y) {
+        if (x > xSize || x < 0 || y > ySize || y < 0) return MapObject.OBSTACLE;
+        else return this.map[x][y];
+    }
+
+    public MapObject testRelativePosition(Direction direction) {
+        int newXPos = this.x_pos + Direction.xOffset(direction);
+        int newYPos = this.y_pos + Direction.yOffset(direction);
+        return this.testPosition(newXPos, newYPos);
+    }
+
+    public int driveFree() {
+        Direction direction = null;
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.FREE) {
+                direction = dir;
+                break;
+            }
+        }
+        if (direction == null) return -1;
+        return driveDirection(direction);
+    }
+
+    public int driveIntelligent() {
+        Direction direction = null;
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
+                if (new Random().nextInt(10) >= 7) {
+                    return driveDirection(dir);
+                }
+            }
+        }
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.FREE) {
+                if (new Random().nextInt(10) >= 5) {
+                    return driveDirection(dir);
+                }
+            }
+        }
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.FREE) {
+                return driveDirection(dir);
+            }
+        }
+        return -1;
+    }
+
+    public int driveForwardChecked() {
+        // Only drives to free fields
+        if (this.testRelativePosition(this.facing) != MapObject.FREE) {
+            return -1;
+        }
+        return this.driveForward();
+    }
+
     @Override
     public int driveForward() {
         // TODO implement correct stuff
 
         // Check in map
+        MapObject destination = this.testRelativePosition(this.facing);
+        if (destination == MapObject.WALL) return -4;
+
         int newXPos = this.x_pos + Direction.xOffset(this.facing);
         int newYPos = this.y_pos + Direction.yOffset(this.facing);
-
-        if (newXPos > xSize || newXPos < 0 || newYPos > ySize || newYPos < 0) return -4;
-
-        if (this.map[newXPos][newYPos] != MapObject.FREE) {
-            return -1;
-            // Or other Error Code like this.map[newXPos][newYPos]
-        }
 
         // Drive and wait for sensors
         this.pilot.travel(mapDistance, true);
@@ -171,6 +225,6 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     }
 
     public enum MapObject {
-        FREE, OBSTACLE, RESOURCE
+        FREE, OBSTACLE, RESOURCE, WALL
     }
 }
