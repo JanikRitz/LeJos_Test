@@ -11,6 +11,11 @@ public class BTMapComm {
                 outputStream.writeInt((int) data.pop()); // Y
                 outputStream.writeInt((int) data.pop()); // Type
                 outputStream.flush();
+            } else{
+                outputStream.writeInt(-1); // X
+                outputStream.writeInt(-1); // Y
+                outputStream.writeInt(-1); // Type
+                outputStream.flush();
             }
         } catch (IOException ioe) {
             return true;
@@ -23,6 +28,7 @@ public class BTMapComm {
             int x = inputStream.readInt();
             int y = inputStream.readInt();
             int type = inputStream.readInt();
+            if(x == -1 || y == -1 || type == -1) return;
             pilot.modifyMap(x, y, type);
         } catch (IOException ioe) {
             // No Data, is Ok, try later

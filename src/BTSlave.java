@@ -1,5 +1,6 @@
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTConnection;
+import static lejos.util.Delay.msDelay;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,7 +35,7 @@ public class BTSlave implements BTGeneric {
 
             if (BTMapComm.sendData(outputStream, this.data)) return -4;
 
-            // TODO Wait
+            msDelay(3000);
         }
     }
 

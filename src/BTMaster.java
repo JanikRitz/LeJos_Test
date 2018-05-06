@@ -1,5 +1,6 @@
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import static lejos.util.Delay.msDelay;
 
 import javax.bluetooth.RemoteDevice;
 import java.io.DataInputStream;
@@ -37,7 +38,7 @@ public class BTMaster implements BTGeneric {
             if (BTMapComm.sendData(outputStream, this.data)) return -4;
 
             BTMapComm.receiveData(inputStream, this.pilot);
-            // TODO wait
+            msDelay(3000);
         }
     }
 
