@@ -19,9 +19,9 @@ public class SlaveNavTest implements ButtonListener {
         Button.ESCAPE.addButtonListener(this);
         DifferentialPilot pilot = DifferentialPilotFactory.newSlavePilot();
 
-        BTGeneric communicator = new BTSlave("NXT"); //TODO real name
+        BTGeneric communicator = new BTSlave("NXT");
 
-        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.0, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 4, 4, NavigationInterface.Direction.SOUTH, communicator); //TODO correct angleCorrection
+        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.0, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 4, 4, NavigationInterface.Direction.SOUTH, false, communicator);
 
         while (true) {
             mapNavigationPilot.driveIntelligent();
