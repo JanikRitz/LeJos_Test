@@ -1,3 +1,4 @@
+import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import static lejos.util.Delay.msDelay;
@@ -26,15 +27,18 @@ public class BTMaster implements BTGeneric {
         RemoteDevice remoteDevice = Bluetooth.getKnownDevice(this.other_nxt);
 
         if (remoteDevice == null) return -2;
+        LCD.drawString("Found Device", 1, 1);
 
         BTConnection connection = Bluetooth.connect(remoteDevice);
 
         if (connection == null) return -3;
+        LCD.drawString("Connected", 1, 3);
 
         DataInputStream inputStream = connection.openDataInputStream();
         DataOutputStream outputStream = connection.openDataOutputStream();
 
         while (true) {
+            LCD.drawString("Sending", 1, 5);
             if (BTMapComm.sendData(outputStream, this.data)) return -4;
 
             BTMapComm.receiveData(inputStream, this.pilot);

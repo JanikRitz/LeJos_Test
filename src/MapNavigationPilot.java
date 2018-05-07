@@ -21,6 +21,7 @@ public class MapNavigationPilot implements NavigationInterface {
     private int xSize;
     private int ySize;
     private Random numberGenerator;
+    private boolean flipLeftRight;
     private UltrasonicSensor distanceSensor;
     private ColorSensor colorSensor;
     private TouchSensor touchSensor;
@@ -30,7 +31,7 @@ public class MapNavigationPilot implements NavigationInterface {
     public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection,
                               SensorPort distancePort, SensorPort colorPort, SensorPort touchPort,
                               int xSize, int ySize, int x_start, int y_start, Direction facing,
-                              BTGeneric communicator) {
+                              boolean flipLeftRight, BTGeneric communicator) {
         this.facing = facing;
         this.pilot = pilot;
         this.angleCorrection = angleCorrection;
@@ -46,6 +47,8 @@ public class MapNavigationPilot implements NavigationInterface {
         this.ySize = ySize;
 
         this.numberGenerator = new Random();
+
+        this.flipLeftRight = flipLeftRight;
 
         this.communicator = communicator;
 
@@ -63,6 +66,7 @@ public class MapNavigationPilot implements NavigationInterface {
 
     @Override
     public void rotateDegrees(double degrees) {
+        degrees = degrees * this.angleCorrection * (this.flipLeftRight ? -1.0 : 1.0);
         pilot.rotate(degrees);
     }
 
@@ -75,8 +79,7 @@ public class MapNavigationPilot implements NavigationInterface {
             // Use Default 0 degrees
         }
 
-        angle = angle * this.angleCorrection;
-        pilot.rotate(angle);
+        this.rotateDegrees(angle);
         this.facing = direction;
     }
 
