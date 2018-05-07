@@ -20,6 +20,7 @@ public class MapNavigationPilot implements NavigationInterface {
     private int y_pos;
     private int xSize;
     private int ySize;
+    private Random numberGenerator;
     private UltrasonicSensor distanceSensor;
     private ColorSensor colorSensor;
     private TouchSensor touchSensor;
@@ -43,6 +44,8 @@ public class MapNavigationPilot implements NavigationInterface {
 
         this.xSize = xSize;
         this.ySize = ySize;
+
+        this.numberGenerator = new Random();
 
         this.communicator = communicator;
 
@@ -104,14 +107,14 @@ public class MapNavigationPilot implements NavigationInterface {
         Direction direction = null;
         for (Direction dir : Direction.values()) {
             if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
-                if (new Random().nextInt(10) >= 3) {
+                if (numberGenerator.nextInt(10) >= 3) {
                     return driveDirection(dir);
                 }
             }
         }
         for (Direction dir : Direction.values()) {
             if (this.testRelativePosition(dir) == MapObject.FREE) {
-                if (new Random().nextInt(10) >= 5) {
+                if (numberGenerator.nextInt(10) >= 5) {
                     return driveDirection(dir);
                 }
             }
