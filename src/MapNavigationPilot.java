@@ -199,6 +199,9 @@ public class MapNavigationPilot implements NavigationInterface {
 
             this.modifyMap(this.x_pos, this.y_pos, MapObject.FREE.ordinal());
         }
+        LCD.drawString("Pos", 1, 0);
+        LCD.drawInt(this.x_pos, 5, 0);
+        LCD.drawInt(this.y_pos, 8, 0);
         return 0;
     }
 
