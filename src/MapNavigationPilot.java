@@ -7,7 +7,7 @@ import java.util.Random;
 import static lejos.util.Delay.msDelay;
 
 
-public class MapNavigationPilot implements NavigationInterface, SensorPortListener {
+public class MapNavigationPilot implements NavigationInterface {
 
     public static final int mapDistance = 300;
     private static final double NORMAL_SPEED = 60; // TODO correct value
@@ -28,18 +28,15 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
 
     public MapNavigationPilot(DifferentialPilot pilot, double angleCorrection,
                               SensorPort distancePort, SensorPort colorPort, SensorPort touchPort,
-                              int xSize, int ySize, int x_start, int y_start,
+                              int xSize, int ySize, int x_start, int y_start, Direction facing,
                               BTGeneric communicator) {
-        this.facing = Direction.NORTH;
+        this.facing = facing;
         this.pilot = pilot;
         this.angleCorrection = angleCorrection;
 
         this.distanceSensor = new UltrasonicSensor(distancePort);
         this.colorSensor = new ColorSensor(colorPort);
         this.touchSensor = new TouchSensor(touchPort);
-
-        touchPort.addSensorPortListener(this);
-        distancePort.addSensorPortListener(this);
 
         this.x_pos = x_start;
         this.y_pos = y_start;
@@ -81,7 +78,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     }
 
     public MapObject testPosition(int x, int y) {
-        if (x > xSize || x < 0 || y > ySize || y < 0) return MapObject.OBSTACLE;
+        if (x >= xSize || x < 0 || y >= ySize || y < 0) return MapObject.OBSTACLE;
         else return this.map[x][y];
     }
 
@@ -107,7 +104,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         Direction direction = null;
         for (Direction dir : Direction.values()) {
             if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
-                if (new Random().nextInt(10) >= 7) {
+                if (new Random().nextInt(10) >= 3) {
                     return driveDirection(dir);
                 }
             }
@@ -121,6 +118,16 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
         }
         for (Direction dir : Direction.values()) {
             if (this.testRelativePosition(dir) == MapObject.FREE) {
+                return driveDirection(dir);
+            }
+        }
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
+                return driveDirection(dir);
+            }
+        }
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == MapObject.OBSTACLE) {
                 return driveDirection(dir);
             }
         }
@@ -175,7 +182,7 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
                 this.modifyMap(newXPos, newYPos, MapObject.RESOURCE.ordinal());
                 LCD.drawString("Found Something", 1, 1);
                 Sound.playTone(1000, 1);
-                Button.waitForAnyPress(2000);
+                // Button.waitForAnyPress(2000);
             } else {
                 // Found Obstacle
                 this.modifyMap(newXPos, newYPos, MapObject.OBSTACLE.ordinal());
@@ -214,14 +221,6 @@ public class MapNavigationPilot implements NavigationInterface, SensorPortListen
     public synchronized void modifyMap(int x, int y, int type) {
         this.map[x][y] = MapObject.values()[type];
         this.communicator.addObject(x, y, MapObject.values()[type]);
-    }
-
-    @Override
-    public void stateChanged(SensorPort sensorPort, int oldValue, int newValue) {
-        // TODO Implement Actions for
-        // TODO Touch Sensor
-        // TODO Ultrasonic Sensor
-        // Is this necessary?
     }
 
     public enum MapObject {

@@ -21,7 +21,7 @@ public class SlaveNavTest implements ButtonListener {
 
         BTGeneric communicator = new BTSlave("NXT"); //TODO real name
 
-        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.35, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 0, 0, communicator); //TODO correct angleCorrection
+        MapNavigationPilot mapNavigationPilot = new MapNavigationPilot(pilot, 1.0, SensorPort.S1, SensorPort.S2, SensorPort.S3, 5, 5, 4, 4, NavigationInterface.Direction.SOUTH, communicator); //TODO correct angleCorrection
 
         while (true) {
             mapNavigationPilot.driveIntelligent();
