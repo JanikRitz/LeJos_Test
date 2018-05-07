@@ -151,8 +151,6 @@ public class MapNavigationPilot implements NavigationInterface {
 
     @Override
     public int driveForward() {
-        // TODO implement correct stuff
-
         // Check in map
         MapObject destination = this.testRelativePosition(this.facing);
         if (destination == MapObject.WALL) return -4;
@@ -189,7 +187,7 @@ public class MapNavigationPilot implements NavigationInterface {
                 this.modifyMap(newXPos, newYPos, MapObject.RESOURCE.ordinal());
                 LCD.drawString("Found Something", 1, 1);
                 Sound.playTone(1000, 1);
-                // Button.waitForAnyPress(2000);
+                Button.waitForAnyPress(5000);
             } else {
                 // Found Obstacle
                 this.modifyMap(newXPos, newYPos, MapObject.OBSTACLE.ordinal());
