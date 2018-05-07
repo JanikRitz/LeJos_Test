@@ -28,5 +28,5 @@ hs_err_pid*
 .idea
 
 # LeJos Files (mostly debugging)
-.nxd
-.nxj
+*.nxd
+*.nxj
