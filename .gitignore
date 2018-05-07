@@ -27,3 +27,6 @@ hs_err_pid*
 # Intellij Files
 .idea
 
+# LeJos Files (mostly debugging)
+.nxd
+.nxj
