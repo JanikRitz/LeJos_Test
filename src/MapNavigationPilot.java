@@ -1,7 +1,8 @@
 import lejos.nxt.*;
 import lejos.robotics.navigation.DifferentialPilot;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static lejos.util.Delay.msDelay;
@@ -107,37 +108,37 @@ public class MapNavigationPilot implements NavigationInterface {
     }
 
     public int driveIntelligent() {
-        Direction direction = null;
         for (Direction dir : Direction.values()) {
             if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
-                if (numberGenerator.nextInt(10) >= 3) {
-                    return driveDirection(dir);
-                }
-            }
-        }
-        for (Direction dir : Direction.values()) {
-            if (this.testRelativePosition(dir) == MapObject.FREE) {
                 if (numberGenerator.nextInt(10) >= 5) {
                     return driveDirection(dir);
                 }
             }
         }
-        for (Direction dir : Direction.values()) {
-            if (this.testRelativePosition(dir) == MapObject.FREE) {
-                return driveDirection(dir);
-            }
-        }
-        for (Direction dir : Direction.values()) {
-            if (this.testRelativePosition(dir) == MapObject.RESOURCE) {
-                return driveDirection(dir);
-            }
-        }
-        for (Direction dir : Direction.values()) {
-            if (this.testRelativePosition(dir) == MapObject.OBSTACLE) {
-                return driveDirection(dir);
-            }
-        }
+
+        Direction free = getRandomDirection(MapObject.FREE);
+        if(free != null) return driveDirection(free);
+
+        Direction resource = getRandomDirection(MapObject.RESOURCE);
+        if(resource != null) return driveDirection(resource);
+
+        Direction obstacle = getRandomDirection(MapObject.OBSTACLE);
+        if(obstacle != null) return driveDirection(obstacle);
+
         return -1;
+    }
+
+    private Direction getRandomDirection(MapObject type) {
+        ArrayList<Direction> frees =new ArrayList<>();
+        for (Direction dir : Direction.values()) {
+            if (this.testRelativePosition(dir) == type) {
+                frees.add(dir);
+            }
+        }
+        if(!frees.isEmpty()){
+            return frees.get(numberGenerator.nextInt(frees.size()));
+        }
+        return null;
     }
 
     public int driveForwardChecked() {
