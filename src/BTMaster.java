@@ -1,6 +1,7 @@
 import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+
 import static lejos.util.Delay.msDelay;
 
 import javax.bluetooth.RemoteDevice;
@@ -9,39 +10,60 @@ import java.io.DataOutputStream;
 import java.util.Queue;
 
 public class BTMaster implements BTGeneric {
-    private final String other_nxt;
+    private final int countOthers;
     private MapNavigationPilot pilot;
+    private String[] otherNxt;
+    private RemoteDevice[] otherNxtRemote;
+    private BTConnection[] otherNxtConnection;
+    private DataInputStream[] otherNxtInput;
+    private DataOutputStream[] otherNxtOutput;
     private Queue<Integer> data;
 
 
-    public BTMaster(String name_other) {
-        this.other_nxt = name_other;
-        this.data = new Queue<Integer>();
+    public BTMaster(String nameOther) {
+        this(new String[]{nameOther});
     }
+
+    public BTMaster(String[] otherNXT) {
+        this.otherNxt = otherNXT;
+        this.data = new Queue<Integer>();
+        this.countOthers = otherNXT.length;
+
+        this.otherNxtRemote = new RemoteDevice[countOthers];
+        this.otherNxtConnection = new BTConnection[countOthers];
+        this.otherNxtInput = new DataInputStream[countOthers];
+        this.otherNxtOutput = new DataOutputStream[countOthers];
+    }
+
 
     public void init(MapNavigationPilot pilot) {
         this.pilot = pilot;
     }
 
     public int commLoop() {
-        RemoteDevice remoteDevice = Bluetooth.getKnownDevice(this.other_nxt);
+        for (int device = 0; device < this.countOthers; device++) {
+            this.otherNxtRemote[device] = Bluetooth.getKnownDevice(this.otherNxt[device]);
 
-        if (remoteDevice == null) return -2;
-        LCD.drawString("Found Device", 1, 1);
-
-        BTConnection connection = Bluetooth.connect(remoteDevice);
-
-        if (connection == null) return -3;
-        LCD.drawString("Connected", 1, 3);
-
-        DataInputStream inputStream = connection.openDataInputStream();
-        DataOutputStream outputStream = connection.openDataOutputStream();
+            if (this.otherNxtRemote[device] != null) {
+                this.otherNxtConnection[device] = Bluetooth.connect(this.otherNxtRemote[device]);
+                if (this.otherNxtConnection[device] != null) {
+                    this.otherNxtInput[device] = otherNxtConnection[device].openDataInputStream();
+                    this.otherNxtOutput[device] = otherNxtConnection[device].openDataOutputStream();
+                }
+            }
+        }
 
         while (true) {
-            LCD.drawString("Sending", 1, 5);
-            if (BTMapComm.sendData(outputStream, this.data)) return -4;
-
-            BTMapComm.receiveData(inputStream, this.pilot);
+            for (int device = 0; device < this.countOthers; device++) {
+                if (this.otherNxtConnection[device] != null) {
+                    if (BTMapComm.sendData(this.otherNxtOutput[device], this.data)) return -4;
+                }
+            }
+            for (int device = 0; device < this.countOthers; device++) {
+                if (this.otherNxtConnection[device] != null) {
+                    BTMapComm.receiveData(this.otherNxtInput[device], this.pilot);
+                }
+            }
             msDelay(3000);
         }
     }
