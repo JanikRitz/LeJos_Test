@@ -49,7 +49,7 @@ public class MapNavigationPilot implements NavigationInterface {
 
         this.numberGenerator = new Random();
 
-        this.flipLeftRight = flipLeftRight;
+        this.flipLeftRight = flipLeftRight; // Could be replaced with negative angleCorrection
 
         this.communicator = communicator;
 
