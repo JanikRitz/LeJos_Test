@@ -20,4 +20,4 @@ Just go through the great tutorial on [Lejos](http://www.lejos.org/nxt/nxj/tutor
   - touchsensor
   - colorsensor
   - ultrasonicsensor
-- see the [Sensors.txt](LeJos_Test/src/Sensors.txt) for reference
+- see the Sensors.txt for reference
